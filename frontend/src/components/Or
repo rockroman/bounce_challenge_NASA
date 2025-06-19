@@ -1,0 +1,116 @@
+import React from 'react'
+import {
+  Box,
+  Flex,
+  Text,
+  IconButton,
+  Stack,
+  useDisclosure,
+  Collapsible,
+} from '@chakra-ui/react'
+import { FiMenu, FiX } from 'react-icons/fi'
+
+const NAV_ITEMS = [
+  {
+    label: 'Home',
+    href: '/',
+  },
+  {
+    label: 'Picture of the Day',
+    href: '/apod',
+  },
+  {
+    label: 'About',
+    href: '/about',
+  }
+]
+
+const NavBar = () => {
+  const { isOpen, onToggle } = useDisclosure()
+
+  return (
+    <Box>
+      <Flex
+        bg="rgba(0, 0, 0, 0.8)"
+        color="white"
+        minH={'60px'}
+        py={2}
+        px={4}
+        borderBottom={1}
+        borderStyle={'solid'}
+        borderColor="whiteAlpha.200"
+        align={'center'}
+        justify={'space-between'}
+      >
+        <Text
+          fontSize={'xl'}
+          bgGradient="linear(to-r, cyan.400, blue.500)"
+          bgClip="text"
+          fontWeight="extrabold">
+          NASA Explorer
+        </Text>
+
+        <Flex>
+          {/* Desktop Nav */}
+          <Stack
+            direction={'row'}
+            spacing={8}
+            display={{ base: 'none', md: 'flex' }}>
+            {NAV_ITEMS.map((item) => (
+              <Text
+                key={item.label}
+                as="a"
+                href={item.href}
+                fontSize={'sm'}
+                fontWeight={500}
+                color="white"
+                _hover={{
+                  textDecoration: 'none',
+                  color: 'blue.300',
+                }}>
+                {item.label}
+              </Text>
+            ))}
+          </Stack>
+
+          {/* Mobile Nav Button */}
+          <IconButton
+            onClick={onToggle}
+            icon={isOpen ? <FiX /> : <FiMenu />}
+            variant={'ghost'}
+            color="white"
+            aria-label={'Toggle Navigation'}
+            display={{ base: 'flex', md: 'none' }}
+          />
+        </Flex>
+      </Flex>
+
+      {/* Mobile Nav Menu */}
+      <Collapsible.Root open={isOpen}>
+        <Collapsible.Content>
+          <Stack
+            bg="gray.900"
+            p={4}
+            display={{ md: 'none' }}>
+            {NAV_ITEMS.map((item) => (
+              <Text
+                key={item.label}
+                as="a"
+                href={item.href}
+                fontSize={'md'}
+                fontWeight={600}
+                color="white"
+                _hover={{
+                  color: 'blue.300',
+                }}>
+                {item.label}
+              </Text>
+            ))}
+          </Stack>
+        </Collapsible.Content>
+      </Collapsible.Root>
+    </Box>
+  )
+}
+
+export default NavBar
