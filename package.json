@@ -1,0 +1,10 @@
+{
+  "name": "bounce-challenge-nasa",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18.x"
+  },
+  "scripts": {
+    "start": "cd backend && npm install && npm start"
+  }
+}

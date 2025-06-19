@@ -8,25 +8,37 @@ dotenv.config();
 
 const app = express();
 
-// Basic middleware
+
+/**
+ * Basic middleware
+ */
 app.use(cors({
     origin: process.env.NODE_ENV === 'production'
         ? process.env.FRONTEND_URL
-        : 'http://localhost:5173' // Vite's default dev port
+        : 'http://localhost:5173'
 }));
 app.use(express.json());
 
-// Initialize OpenAI
+//
+/**
+ * OpenAI
+ */
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 });
 
-// Test route
+//
+/**
+ * home route
+ */
 app.get('/', (req, res) => {
     res.json({ message: 'NASA Explorer API is running' });
 });
 
-// NASA APOD API endpoint
+//
+/**
+ * NASA APOD API endpoint
+ */
 app.get('/api/apod', async (req, res) => {
     try {
         const response = await axios.get('https://api.nasa.gov/planetary/apod', {
@@ -41,7 +53,10 @@ app.get('/api/apod', async (req, res) => {
     }
 });
 
-// Mars Rover Photos API endpoint
+//
+/**
+ * Mars Rover Photos API endpoint
+ */
 app.get('/api/mars-photos', async (req, res) => {
     try {
         const { sol = 1000, rover = 'curiosity', camera = 'NAVCAM' } = req.query;
@@ -61,7 +76,10 @@ app.get('/api/mars-photos', async (req, res) => {
     }
 });
 
-// Image Analysis endpoint
+//
+/**
+ * Image Analysis endpoint
+ */
 app.post('/api/analyze-image', async (req, res) => {
     try {
         const { imageUrl } = req.body;
@@ -97,12 +115,12 @@ app.post('/api/analyze-image', async (req, res) => {
         const completionTokens = response.usage?.completion_tokens || 0;
         const totalTokens = response.usage?.total_tokens || 0;
 
-        // GPT-4o-mini pricing: $0.00015 per 1K prompt tokens, $0.0006 per 1K completion tokens
+        // GPT-4o-mini pricing
         const promptCost = (promptTokens / 1000) * 0.00015;
         const completionCost = (completionTokens / 1000) * 0.0006;
         const totalCost = promptCost + completionCost;
 
-        // Convert USD to EUR (approximate conversion rate)
+        // USD to EUR
         const usdToEur = 0.92;
         const totalCostEur = totalCost * usdToEur;
 
@@ -143,7 +161,7 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     console.log('Available endpoints:');
-    console.log('GET / - Test endpoint');
+    console.log('GET / - Home endpoint');
     console.log('GET /api/apod - NASA Picture of the Day');
     console.log('GET /api/mars-photos - Mars Rover Photos');
     console.log('POST /api/analyze-image - Analyze astronomy images');
