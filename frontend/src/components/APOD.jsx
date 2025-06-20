@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+
+import axios from '../api/axiosDefault';
 import {
     Box,
     Button,
@@ -24,7 +25,8 @@ const APOD = () => {
         const fetchAPOD = async () => {
             try {
                 setLoading(true);
-                const response = await axios.get('http://localhost:3000/api/apod');
+                const response = await axios.get(`/api/apod`);
+                console.log("response ",response)
                 setApodData(response.data);
             } catch (err) {
                 setError('Failed to fetch astronomy picture of the day');
@@ -40,7 +42,7 @@ const APOD = () => {
     const handleAnalyze = async () => {
         try {
             setAnalyzing(true);
-            const response = await axios.post('http://localhost:3000/api/analyze-image', {
+            const response = await axios.post('/api/analyze-image', {
                 imageUrl: apodData.url
             });
             // Clean up the description text by removing markdown and extra newlines

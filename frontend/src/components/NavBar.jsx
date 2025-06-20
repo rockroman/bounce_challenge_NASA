@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import { GiHamburgerMenu } from "react-icons/gi";
+import { MdRocketLaunch } from "react-icons/md";
+import { LuNavigation } from "react-icons/lu";
 import {
   Button,
   CloseButton,
@@ -38,9 +41,26 @@ const NavBar = () => {
 
         <Drawer.Root open={open} onOpenChange={(e) => setOpen(e.open)}>
           <Drawer.Trigger asChild>
-            <Button variant="outline" color="white">
+                <Button
+                    animation="pulse 3s infinite"
+                    // colorScheme="blue"
+                    border="red"
+                    color="gray.300"
+                    bg="rgb(41 72 147 / 89%)"
+
+                    >
+                    {/* <LuNavigation
+                    size="2%"/> */}
+                    <MdRocketLaunch
+                    size="3%"
+                    color='white'
+                    border="red" />
+                    </Button>
+
+            {/* <Button variant="outline" color="white">
               Menu
-            </Button>
+            </Button> */}
+            {/* <GiHamburgerMenu /> */}
           </Drawer.Trigger>
           <Portal>
             <Drawer.Backdrop />
