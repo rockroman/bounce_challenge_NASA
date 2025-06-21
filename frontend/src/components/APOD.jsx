@@ -47,8 +47,10 @@ const APOD = () => {
             });
             // Clean up the description text by removing markdown and extra newlines
             const cleanDescription = response.data.description
-                .replace(/[#*`]/g, '')  // Remove markdown characters
-                .replace(/\n{3,}/g, '\n\n')  // Replace multiple newlines with double newlines
+            // sorting markdown returned
+                .replace(/[#*`]/g, '')
+                //  newlines with double newlines
+                .replace(/\n{3,}/g, '\n\n')
                 .trim();
             setAnalysis({ ...response.data, description: cleanDescription });
         } catch (err) {
@@ -71,7 +73,7 @@ const APOD = () => {
         return (
             <Container centerContent p={8}>
                 <Alert status="error">
-                    <AlertIcon />
+
                     {error}
                 </Alert>
             </Container>
@@ -171,7 +173,7 @@ const APOD = () => {
                 {/* Description */}
                 <Box>
 
-                    <Text mt={2}>
+                    <Text mt={2} textAlign="left">
                         {apodData?.explanation}
                     </Text>
                     {apodData?.copyright && (

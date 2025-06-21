@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { GiHamburgerMenu } from "react-icons/gi";
 import { MdRocketLaunch } from "react-icons/md";
 import { LuNavigation } from "react-icons/lu";
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Button,
   CloseButton,
@@ -15,6 +16,7 @@ import {
 const LinkItems = [
   { name: 'Home', href: '/' },
   { name: 'Picture of the Day', href: '/apod' },
+  { name: 'Image Search', href: '/search' },
   { name: 'About', href: '/about' },
 ]
 
@@ -49,8 +51,7 @@ const NavBar = () => {
                     bg="rgb(41 72 147 / 89%)"
 
                     >
-                    {/* <LuNavigation
-                    size="2%"/> */}
+
                     <MdRocketLaunch
                     size="3%"
                     color='white'
@@ -84,7 +85,8 @@ const NavBar = () => {
                   {LinkItems.map((link) => (
                     <Link
                       key={link.name}
-                      href={link.href}
+                      as={RouterLink}
+                      to={link.href}
                       display="block"
                       p="4"
                       color="white"
