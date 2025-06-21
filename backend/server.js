@@ -4,9 +4,48 @@ import cors from 'cors';
 import axios from 'axios';
 import OpenAI from 'openai';
 
+
+
 dotenv.config();
 
 const app = express();
+
+//in-memory cache implementation
+const cache = {
+    data: new Map(),
+    // 1 hour(milliseconds)
+    maxAge: 3600000,
+    set: function(key, value) {
+        this.data.set(key, {
+            value,
+            timestamp: Date.now()
+        });
+    },
+    get: function(key) {
+        const item = this.data.get(key);
+        if (!item) return null;
+
+        if (Date.now() - item.timestamp > this.maxAge) {
+            this.data.delete(key);
+            return null;
+        }
+
+        return item.value;
+    },
+    clear: function() {
+        this.data.clear();
+    }
+};
+
+// Clean up expired cache entries periodically
+setInterval(() => {
+    for (let [key, value] of cache.data.entries()) {
+        if (Date.now() - value.timestamp > cache.maxAge) {
+            cache.data.delete(key);
+        }
+    }
+// Runing every 5 minutes
+}, 300000);
 
 
 /**
@@ -152,6 +191,107 @@ app.post('/api/analyze-image', async (req, res) => {
         });
         res.status(500).json({
             error: 'Failed to analyze image',
+            details: error.message
+        });
+    }
+});
+
+
+/**
+ * Image Search endpoint
+ * NLP queries and searches NASA's image database
+ */
+app.post('/api/image-search', async (req, res) => {
+    try {
+        const { query, page = 1, perPage = 20 } = req.body;
+
+        if (!query) {
+            return res.status(400).json({ error: 'No search query in request body' });
+        }
+
+        // Checking cache
+        const cacheKey = `query_${query}_${page}_${perPage}`;
+        const cachedResult = cache.get(cacheKey);
+
+        if (cachedResult) {
+            console.log('Cache hit for query:', query);
+            return res.json(cachedResult);
+        }
+
+        // NLP query with OpenAI
+        const aiResponse = await openai.chat.completions.create({
+            model: "gpt-4o-mini",
+            messages: [
+                {
+                    role: "system",
+                    content: `You are a senior NASA image search assistant.
+                     your job si to Extract key search terms and parameters from natural language queries.
+                      Return ONLY a JSON object with:
+                      - keywords (array of strings),
+                      - yearStart (YYYY, optional),
+                      - yearEnd (YYYY, optional),
+                      - mediaType (image/video/audio, optional).`
+                },
+                {
+                    role: "user",
+                    content: query
+                }
+            ],
+            response_format: { type: "json_object" }
+        });
+
+        // Parsing AI response
+        const searchParams = JSON.parse(aiResponse.choices[0].message.content);
+
+        // Search NASA's image library
+        const nasaResponse = await axios.get('https://images-api.nasa.gov/search', {
+            params: {
+                q: searchParams.keywords.join(' '),
+                media_type: searchParams.mediaType || 'image',
+                year_start: searchParams.yearStart,
+                year_end: searchParams.yearEnd,
+                page: page,
+                page_size: perPage
+            }
+        });
+
+        // Process and format the response
+        const formattedResults = nasaResponse.data.collection.items.map(item => {
+            const data = item.data[0];
+            const links = item.links || [];
+            return {
+                title: data.title,
+                description: data.description,
+                dateCreated: data.date_created,
+                nasaId: data.nasa_id,
+                thumbnail: links.find(link => link.rel === 'preview')?.href,
+                imageUrl: links.find(link => link.rel === 'orig')?.href,
+                mediaType: data.media_type
+            };
+        });
+
+        const result = {
+            results: formattedResults,
+            query: searchParams,
+            totalResults: nasaResponse.data.collection.metadata.total_hits,
+            page: page,
+            perPage: perPage
+        };
+
+        // Caching the results
+        cache.set(cacheKey, result);
+
+        res.json(result);
+
+    } catch (error) {
+        console.error('Error details:', {
+            message: error.message,
+            status: error.status,
+            response: error.response?.data,
+            stack: error.stack
+        });
+        res.status(500).json({
+            error: 'Failed to search for images',
             details: error.message
         });
     }
