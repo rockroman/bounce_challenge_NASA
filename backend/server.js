@@ -3,8 +3,10 @@ import express from 'express';
 import cors from 'cors';
 import axios from 'axios';
 import OpenAI from 'openai';
+import { calculateTokenUsage } from './utils/openAiUtils.js';
 
 
+calculateTokenUsage
 
 dotenv.config();
 
@@ -150,36 +152,43 @@ app.post('/api/analyze-image', async (req, res) => {
             max_completion_tokens: 500
         });
 
-        const promptTokens = response.usage?.prompt_tokens || 0;
-        const completionTokens = response.usage?.completion_tokens || 0;
-        const totalTokens = response.usage?.total_tokens || 0;
+        // const promptTokens = response.usage?.prompt_tokens || 0;
+        // const completionTokens = response.usage?.completion_tokens || 0;
+        // const totalTokens = response.usage?.total_tokens || 0;
 
-        // GPT-4o-mini pricing
-        const promptCost = (promptTokens / 1000) * 0.00015;
-        const completionCost = (completionTokens / 1000) * 0.0006;
-        const totalCost = promptCost + completionCost;
+        // // GPT-4o-mini pricing
+        // const promptCost = (promptTokens / 1000) * 0.00015;
+        // const completionCost = (completionTokens / 1000) * 0.0006;
+        // const totalCost = promptCost + completionCost;
 
-        // USD to EUR
-        const usdToEur = 0.92;
-        const totalCostEur = totalCost * usdToEur;
+        // // USD to EUR
+        // const usdToEur = 0.92;
+        // const totalCostEur = totalCost * usdToEur;
 
-        console.log('Token Usage:', {
-            promptTokens,
-            completionTokens,
-            totalTokens,
-            costUSD: totalCost.toFixed(6),
-            costEUR: totalCostEur.toFixed(6)
-        });
+        // console.log('Token Usage:', {
+        //     promptTokens,
+        //     completionTokens,
+        //     totalTokens,
+        //     costUSD: totalCost.toFixed(6),
+        //     costEUR: totalCostEur.toFixed(6)
+        // });
+
+        // res.json({
+        //     description: response.choices[0].message.content,
+        //     usage: {
+        //         promptTokens,
+        //         completionTokens,
+        //         totalTokens,
+        //         costUSD: totalCost.toFixed(6),
+        //         costEUR: totalCostEur.toFixed(6)
+        //     }
+        // });
+
+        const usage = calculateTokenUsage(response.usage);
 
         res.json({
             description: response.choices[0].message.content,
-            usage: {
-                promptTokens,
-                completionTokens,
-                totalTokens,
-                costUSD: totalCost.toFixed(6),
-                costEUR: totalCostEur.toFixed(6)
-            }
+            usage
         });
 
     } catch (error) {
@@ -203,7 +212,7 @@ app.post('/api/analyze-image', async (req, res) => {
  */
 app.post('/api/image-search', async (req, res) => {
     try {
-        const { query, page = 1, perPage = 20 } = req.body;
+        const { query, page = 1, perPage = 10 } = req.body;
 
         if (!query) {
             return res.status(400).json({ error: 'No search query in request body' });
@@ -223,14 +232,38 @@ app.post('/api/image-search', async (req, res) => {
             model: "gpt-4o-mini",
             messages: [
                 {
-                    role: "system",
-                    content: `You are a senior NASA image search assistant.
-                     your job si to Extract key search terms and parameters from natural language queries.
-                      Return ONLY a JSON object with:
-                      - keywords (array of strings),
-                      - yearStart (YYYY, optional),
-                      - yearEnd (YYYY, optional),
-                      - mediaType (image/video/audio, optional).`
+                role: "system",
+                content: `You are a NASA image search expert. Analyze natural language queries and extract precise search parameters.
+                Your task is to extract:
+                1. keywords: Array of search terms, prioritizing astronomical objects and phenomena. Correct common misspellings (e.g. "Jupyter" → "Jupiter")
+                2. yearStart: (YYYY format) Extract specific year or range start.
+                3. yearEnd: (YYYY format) Extract specific year or range end.
+                4. mediaType: Preferred media type (image/video/audio)
+                5. limit: Number of results requested (if specified in query)
+
+                Format as JSON. Examples:
+                Query: "3 Mars rover images from 2025"
+                {
+                "keywords": ["Mars", "rover"],
+                "yearStart": "2025",
+                "yearEnd": "2025",
+                "mediaType": "image",
+                "limit": 3,
+                }
+
+                Query: "Show me Jupiter's moons from last year"
+                {
+                "keywords": ["Jupiter", "moons"],
+                "yearStart": "2024",
+                "yearEnd": "2024",
+                "mediaType": "image"
+                }
+
+                6.Be precise and specific with astronomical terms and dates.
+                7.Handle common variations and misspellings of astronomical terms.
+                8.If no specific count is mentioned, omit the limit field.
+                IMPORTANT:do not assume or extract non existing terms
+                `
                 },
                 {
                     role: "user",
@@ -240,7 +273,14 @@ app.post('/api/image-search', async (req, res) => {
             response_format: { type: "json_object" }
         });
 
-        // Parsing AI response
+        // token usage
+        const usage = calculateTokenUsage(aiResponse.usage);
+        console.log('Token Usage Details:', {
+            raw: aiResponse.usage,
+            calculated: usage
+        });
+
+        // AI response
         const searchParams = JSON.parse(aiResponse.choices[0].message.content);
 
         // Search NASA's image library
@@ -251,11 +291,11 @@ app.post('/api/image-search', async (req, res) => {
                 year_start: searchParams.yearStart,
                 year_end: searchParams.yearEnd,
                 page: page,
-                page_size: perPage
+                page_size: searchParams.limit || perPage
             }
         });
 
-        // Process and format the response
+        // format the response
         const formattedResults = nasaResponse.data.collection.items.map(item => {
             const data = item.data[0];
             const links = item.links || [];
@@ -270,13 +310,25 @@ app.post('/api/image-search', async (req, res) => {
             };
         });
 
+        // limit handling
+        let processedResults = formattedResults;
+        if (searchParams.limit) {
+            processedResults = formattedResults.slice(0, Math.min(searchParams.limit, 10));
+        } else {
+            processedResults = formattedResults.slice(0, 10);
+        }
+
         const result = {
-            results: formattedResults,
+            results: processedResults,
             query: searchParams,
             totalResults: nasaResponse.data.collection.metadata.total_hits,
             page: page,
-            perPage: perPage
+            perPage: Math.min(searchParams.limit || 10, 10),
+            tokenUsage: usage
         };
+
+        // Log
+        console.log('Result with usage:', JSON.stringify(usage, null, 2));
 
         // Caching the results
         cache.set(cacheKey, result);
