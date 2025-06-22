@@ -47,7 +47,7 @@ const NasaImageResults = ({ results, loading, error }) => {
 
     return (
         <>
-            <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} p={4}>
+            <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} p={4} gap={3}>
                 {results.map((image) => (
                     <Box
                         key={image.nasaId}
@@ -63,15 +63,17 @@ const NasaImageResults = ({ results, loading, error }) => {
                             src={image.thumbnail}
                             alt={image.title}
                             width="100%"
-                            height="200px"
+                            height="250px"
                             objectFit="cover"
                             fallbackSrc="https://via.placeholder.com/300x200?text=Loading..."
+                            border="1px solid #3a3636"
+                            rounded="md"
                         />
                         <VStack p={4} align="start" spacing={2}>
                             <Text fontWeight="bold" noOfLines={1}>
                                 {image.title}
                             </Text>
-                            <Text fontSize="sm" color="gray.400" noOfLines={2}>
+                            <Text fontSize="sm" color="gray.400" noOfLines={2} textAlign="left">
                                 {image.description}
                             </Text>
                             <Badge colorScheme="blue">
@@ -82,11 +84,19 @@ const NasaImageResults = ({ results, loading, error }) => {
                 ))}
             </SimpleGrid>
 
-            <Dialog.Root open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
+            <Dialog.Root open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}
+
+                >
                 <Portal>
                     <Dialog.Backdrop />
-                    <Dialog.Positioner>
-                        <Dialog.Content bg="gray.900" maxW="4xl">
+                    <Dialog.Positioner
+
+                    >
+                        <Dialog.Content
+                            bg="gray.900" maxW="4xl"
+                            borderWidth="2px"
+                            borderColor="gray.600"
+                            borderRadius="md">
                             <Dialog.Header>
                                 <Dialog.Title color="white">{selectedImage?.title}</Dialog.Title>
                                 <Dialog.CloseTrigger asChild>
@@ -101,7 +111,7 @@ const NasaImageResults = ({ results, loading, error }) => {
                                     maxH="600px"
                                     objectFit="contain"
                                 />
-                                <Text mt={4} color="white">
+                                <Text mt={4} color="white" textAlign="left">
                                     {selectedImage?.description}
                                 </Text>
                                 <Text mt={2} fontSize="sm" color="gray.400">

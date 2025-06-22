@@ -26,20 +26,31 @@ const NavBar = () => {
   return (
     <>
       <Flex
-        bg="rgba(0, 0, 0, 0.8)"
+        bg="linear-gradient(to bottom, #1a1a2e, #16213e)"
         color="white"
         minH="60px"
         py={2}
         px={4}
         align="center"
         justify="space-between">
-        <Text
+        {/* <Text
           fontSize="2xl"
           fontWeight="bold"
           bg="gray.200"
           bgClip="text">
           NASA Explorer
-        </Text>
+        </Text> */}
+        <Link
+          key="Home"
+          as={RouterLink}
+          to="/"
+          fontSize="2xl"
+          fontWeight="bold"
+          color="white"
+          _hover={{ color: "blue.300" }}
+        >
+          NASA Explorer
+          </Link>
 
         <Drawer.Root open={open} onOpenChange={(e) => setOpen(e.open)}>
           <Drawer.Trigger asChild>
@@ -58,10 +69,7 @@ const NavBar = () => {
                     border="red" />
                     </Button>
 
-            {/* <Button variant="outline" color="white">
-              Menu
-            </Button> */}
-            {/* <GiHamburgerMenu /> */}
+
           </Drawer.Trigger>
           <Portal>
             <Drawer.Backdrop />

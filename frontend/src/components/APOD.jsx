@@ -45,7 +45,7 @@ const APOD = () => {
             const response = await axios.post('/api/analyze-image', {
                 imageUrl: apodData.url
             });
-            // Clean up the description text by removing markdown and extra newlines
+            //  the description text  Clean up-remove markdown
             const cleanDescription = response.data.description
             // sorting markdown returned
                 .replace(/[#*`]/g, '')

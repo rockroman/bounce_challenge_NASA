@@ -11,7 +11,8 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(to bottom, #1a1a2e, #16213e);
+  /* background: linear-gradient(to bottom, #1a1a2e, #16213e); */
+  background-color: #1a1a2e;
   color: white;
 }
 
@@ -31,13 +32,14 @@
 
 .app-main {
   flex: 1;
-  padding: 1rem;
+  /* padding: 1rem; */
 }
 
 .app-footer {
   text-align: center;
   padding: 1rem;
-  background: rgba(0, 0, 0, 0.5);
+  /* background: rgba(0, 0, 0, 0.5); */
+  background:linear-gradient(to bottom, #1a1a2e, #16213e);
   font-size: 0.9rem;
   color: #aaa;
 }

@@ -31,6 +31,7 @@ const ImageSearch = () => {
             setLoading(true)
             setError(null)
             const response = await axios.post('/api/image-search', { query })
+            console.log("response results = ",response.data.results)
             setResults(response.data.results)
         } catch (err) {
             setError('Failed to fetch images. Please try again.')
@@ -47,8 +48,8 @@ const ImageSearch = () => {
 
     return (
         <Container maxW="6xl" py={8}>
-            <VStack spacing={8} align="stretch">
-                <Box textAlign="center">
+            <VStack spacing={8} align="stretch" marginTop={6}>
+                <Box textAlign="center" >
                     <Heading mb={4}>NASA Image Search</Heading>
                     <Text color="gray.400" mb={8}>
                         Search through NASA's image database using natural language
@@ -75,7 +76,12 @@ const ImageSearch = () => {
                     </InputGroup>
                     <Button size="sm"
                     onClick={handleSearch}
-                    >Search</Button>
+                    marginTop={3}
+                    variant="outline"
+                    border="solid gray"
+                    color="white"
+                    >
+                    Search</Button>
                 </Box>
 
 
