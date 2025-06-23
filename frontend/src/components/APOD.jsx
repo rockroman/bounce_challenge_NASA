@@ -7,12 +7,11 @@ import {
     Text,
     Image,
     Container,
-    Spinner,
     Alert,
-
     VStack,
     Center,
 } from "@chakra-ui/react";
+import RocketSpinner from './RocketSpinner'; // Import the new spinner
 
 const APOD = () => {
     const [apodData, setApodData] = useState(null);
@@ -63,7 +62,7 @@ const APOD = () => {
     if (loading) {
         return (
             <Container centerContent p={8}>
-                <Spinner size="xl" />
+                <RocketSpinner size="xl" />
                 <Text mt={4}>Loading...</Text>
             </Container>
         );
@@ -138,7 +137,7 @@ const APOD = () => {
                 {analyzing && (
                     <Center p={4}>
                         <VStack>
-                            <Spinner size="lg" color="blue.500" />
+                            <RocketSpinner size="lg" />
                             <Text color="gray.600">AI is analyzing the image...</Text>
                         </VStack>
                     </Center>

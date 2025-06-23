@@ -35,7 +35,6 @@ const Home = () => {
       <VStack
         spacing={6}
         p={8}
-        // bg="rgba(1, 1, 1, 0.6)" // Semi-transparent overlay for text readability
         bg="rgba(26, 26, 42, 0.8)"
         borderRadius="lg"
         textAlign="center"

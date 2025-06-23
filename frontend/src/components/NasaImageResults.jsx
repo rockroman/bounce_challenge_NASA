@@ -10,7 +10,10 @@ import {
     Dialog,
     Portal,
     CloseButton,
+    Container, // Import Container
+    Center, // Import Center
 } from '@chakra-ui/react';
+import RocketSpinner from './RocketSpinner'; // Import RocketSpinner
 
 const NasaImageResults = ({ results, loading, error }) => {
     const [selectedImage, setSelectedImage] = React.useState(null);
@@ -21,11 +24,11 @@ const NasaImageResults = ({ results, loading, error }) => {
 
     if (loading) {
         return (
-            <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} p={4}>
-                {[...Array(6)].map((_, i) => (
-                    <Skeleton key={i} height="200px" borderRadius="lg" />
-                ))}
-            </SimpleGrid>
+            <Container centerContent p={8}>
+                <Center>
+                    <RocketSpinner size="xl" />
+                </Center>
+            </Container>
         );
     }
 

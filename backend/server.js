@@ -292,16 +292,30 @@ app.post('/api/image-search', async (req, res) => {
             });
         }
 
-        // Search NASA's image library
+        //  params, validating the year fields
+        const nasaParams = {
+            q: searchParams.keywords.join(' '),
+            media_type: searchParams.mediaType || 'image',
+            page: page,
+            page_size: searchParams.limit || perPage
+        };
+
+        // check for a 4-digit year
+        const yearRegex = /^\d{4}$/;
+
+        // Only add year_start if it's a valid year
+        if (searchParams.yearStart && yearRegex.test(searchParams.yearStart)) {
+            nasaParams.year_start = searchParams.yearStart;
+        }
+
+        // Only add year_end if it's a valid year
+        if (searchParams.yearEnd && yearRegex.test(searchParams.yearEnd)) {
+            nasaParams.year_end = searchParams.yearEnd;
+        }
+
+        // Search with the validated parameters
         const nasaResponse = await axios.get('https://images-api.nasa.gov/search', {
-            params: {
-                q: searchParams.keywords.join(' '),
-                media_type: searchParams.mediaType || 'image',
-                year_start: searchParams.yearStart,
-                year_end: searchParams.yearEnd,
-                page: page,
-                page_size: searchParams.limit || perPage
-            }
+            params: nasaParams
         });
 
         // format the response
