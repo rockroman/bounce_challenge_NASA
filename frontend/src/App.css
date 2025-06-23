@@ -1,6 +1,5 @@
 #root {
   width: 100%;
-  /* max-width: 1280px; */
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -11,7 +10,6 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  /* background: linear-gradient(to bottom, #1a1a2e, #16213e); */
   background-color: #1a1a2e;
   color: white;
 }
@@ -44,38 +42,20 @@
   color: #aaa;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+
+
+.search-icon{
+
+  height: 2.8rem;
+  width: 2.8rem;
+  font-weight: 800;
+  border: 2px solid #74abdf;
+  border-radius: 11%;
+
+
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.search-icon:hover{
+  border: 3px solid white;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}

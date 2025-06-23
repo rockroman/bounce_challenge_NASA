@@ -4,6 +4,7 @@ import cors from 'cors';
 import axios from 'axios';
 import OpenAI from 'openai';
 import { calculateTokenUsage } from './utils/openAiUtils.js';
+import { popularSearchTerms } from './utils/suggestions.js';
 
 
 calculateTokenUsage
@@ -17,13 +18,13 @@ const cache = {
     data: new Map(),
     // 1 hour(milliseconds)
     maxAge: 3600000,
-    set: function(key, value) {
+    set: function (key, value) {
         this.data.set(key, {
             value,
             timestamp: Date.now()
         });
     },
-    get: function(key) {
+    get: function (key) {
         const item = this.data.get(key);
         if (!item) return null;
 
@@ -34,7 +35,7 @@ const cache = {
 
         return item.value;
     },
-    clear: function() {
+    clear: function () {
         this.data.clear();
     }
 };
@@ -46,7 +47,7 @@ setInterval(() => {
             cache.data.delete(key);
         }
     }
-// Runing every 5 minutes
+    // Runing every 5 minutes
 }, 300000);
 
 
@@ -101,7 +102,7 @@ app.get('/api/apod', async (req, res) => {
 app.get('/api/mars-photos', async (req, res) => {
     try {
         const { sol = 1000, rover = 'curiosity', camera = 'NAVCAM' } = req.query;
-        const response = await axios.get(`https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}/photos`, {
+        const response = await axios.get(`https://api.nasa.gov/mars-photos/api/v1/rovers/${ rover }/photos`, {
             params: {
                 sol,
                 camera,
@@ -219,7 +220,7 @@ app.post('/api/image-search', async (req, res) => {
         }
 
         // Checking cache
-        const cacheKey = `query_${query}_${page}_${perPage}`;
+        const cacheKey = `query_${ query }_${ page }_${ perPage }`;
         const cachedResult = cache.get(cacheKey);
 
         if (cachedResult) {
@@ -232,8 +233,8 @@ app.post('/api/image-search', async (req, res) => {
             model: "gpt-4o-mini",
             messages: [
                 {
-                role: "system",
-                content: `You are a NASA image search expert. Analyze natural language queries and extract precise search parameters.
+                    role: "system",
+                    content: `You are a NASA image search expert. Analyze natural language queries and extract precise search parameters.
                 Your task is to extract:
                 1. keywords: Array of search terms, prioritizing astronomical objects and phenomena. Correct common misspellings (e.g. "Jupyter" → "Jupiter")
                 2. yearStart: (YYYY format) Extract specific year or range start.
@@ -282,6 +283,14 @@ app.post('/api/image-search', async (req, res) => {
 
         // AI response
         const searchParams = JSON.parse(aiResponse.choices[0].message.content);
+
+        // Validate extracted keywords
+        if (!searchParams.keywords || searchParams.keywords.length === 0) {
+            return res.status(400).json({
+                error: "Invalid search query",
+                details: "Could not extract any searchable keywords. Please try a more specific search term like 'Jupiter' or 'Orion Nebula'."
+            });
+        }
 
         // Search NASA's image library
         const nasaResponse = await axios.get('https://images-api.nasa.gov/search', {
@@ -349,9 +358,36 @@ app.post('/api/image-search', async (req, res) => {
     }
 });
 
+/**
+ * search suggestion lightweight endpoint using array
+ */
+app.get('/api/search-suggestions', async (req, res) => {
+
+    try {
+        const term = req.query.term?.toLowerCase() || '';
+        const suggestions = popularSearchTerms.filter(item => item.toLowerCase().includes(term));
+        res.json(suggestions);
+
+    } catch (error) {
+
+        console.error('Error details:', {
+            message: error.message,
+            status: error.status,
+            response: error.response?.data,
+            stack: error.stack
+        });
+        res.status(500).json({
+            error: 'Failed to get suggestions',
+            details: error.message
+        });
+
+    }
+
+})
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on port ${ PORT }`);
     console.log('Available endpoints:');
     console.log('GET / - Home endpoint');
     console.log('GET /api/apod - NASA Picture of the Day');
