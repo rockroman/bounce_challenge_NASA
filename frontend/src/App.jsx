@@ -14,7 +14,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/apod" element={<APOD />} />
-          <Route path="/about" element={<About/>} />
           <Route path="/search" element={<ImageSearch/>} />
         </Routes>
       </main>

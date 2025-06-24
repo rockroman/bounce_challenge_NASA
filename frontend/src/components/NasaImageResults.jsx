@@ -49,7 +49,9 @@ const NasaImageResults = ({ results, loading, error }) => {
     }
 
     return (
-        <>
+
+        <Box
+        >
             <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} p={4} gap={3}>
                 {results.map((image) => (
                     <Box
@@ -127,7 +129,7 @@ const NasaImageResults = ({ results, loading, error }) => {
                     </Dialog.Positioner>
                 </Portal>
             </Dialog.Root>
-        </>
+        </Box>
     );
 };
 

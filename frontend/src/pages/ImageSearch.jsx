@@ -95,17 +95,27 @@ const ImageSearch = () => {
     };
 
     return (
-        <Container maxW="6xl" py={8}>
+        <Box
+             bgImage="url('https://images.pexels.com/photos/813269/pexels-photo-813269.jpeg')"
+            bgSize="cover"
+            bgPosition="center"
+            borderRadius="lg"
+            minH="calc(100vh - 60px)"
+            py={8}
+
+        >
+        <Container maxW="6xl" py={8}
+        >
             <VStack spacing={8} align="stretch" marginTop={6}>
-                <Box textAlign="center" >
-                    <Heading mb={4}>NASA Image Search</Heading>
+                <Box textAlign="center" mt={6}>
+                    <Heading size="2xl" mb={4}>NASA Image Search</Heading>
                     <Text color="gray.400" mb={8}>
                         Search through NASA's image database using natural language
                     </Text>
                 </Box>
 
                 <Box as="form" onSubmit={handleSearch} position="relative">
-                        <Flex align="center" gap={3}>
+                        <Flex align="center" gap={3} width="85vw">
                         <LuSearch color='#74abdf'
                          className='search-icon'
                          cursor="pointer"
@@ -113,13 +123,15 @@ const ImageSearch = () => {
 />
                         <InputGroup>
                             <Input
-                                placeholder="'Show me pictures of Mars rovers from 2020' or 'Jupiter's moons'"
+                                placeholder="Show me pictures of Mars rovers from 2020"
+                                _placeholder={{ color: "#496075" }}
                                 value={query}
+                                variant="outline"
                                 size="lg"
                                 width="80vw"
                                 onChange={(e) => setQuery(e.target.value)}
-                                bg="rgba(0, 0, 0, 0.3)"
-                                border="1px solid"
+                                bg="rgba(14, 14, 15, 0.9)"
+                                border="1px solid  #496075"
                                 borderColor="whiteAlpha.300"
                                 _hover={{
                                     borderColor: "whiteAlpha.400"
@@ -133,9 +145,7 @@ const ImageSearch = () => {
                         </InputGroup>
                     </Flex>
                     <SuggestionsDropdown suggestions={suggestions} onSelect={handleSuggestionClick} />
-                    {/* <Button size="sm"
-                    onClick={handleSearch}
-                    >Search</Button> */}
+
                 </Box>
 
 
@@ -147,6 +157,7 @@ const ImageSearch = () => {
                 />
             </VStack>
         </Container>
+    </Box>
     )
 }
 

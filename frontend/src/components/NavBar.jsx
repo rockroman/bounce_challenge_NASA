@@ -17,7 +17,7 @@ const LinkItems = [
   { name: 'Home', href: '/' },
   { name: 'Picture of the Day', href: '/apod' },
   { name: 'Image Search', href: '/search' },
-  { name: 'About', href: '/about' },
+
 ]
 
 const NavBar = () => {
