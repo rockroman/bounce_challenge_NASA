@@ -3,7 +3,6 @@ import { Routes, Route } from 'react-router-dom'
 import APOD from './components/APOD'
 import NavBar from './components/NavBar'
 import Home from './pages/Home'
-import About from './pages/About'
 import ImageSearch from './pages/ImageSearch'
 
 function App() {
