@@ -119,16 +119,15 @@ const ImageSearch = () => {
                         <LuSearch color='#74abdf'
                          className='search-icon'
                          cursor="pointer"
-                         onClick={handleSearch}
-/>
+                         style={{ flexShrink: 0 }}
+                         onClick={handleSearch}/>
                         <InputGroup>
                             <Input
                                 placeholder="Show me pictures of Mars rovers from 2020"
-                                _placeholder={{ color: "#496075" }}
+                                _placeholder={{ color: "#909eab" }}
                                 value={query}
                                 variant="outline"
                                 size="lg"
-                                width="80vw"
                                 onChange={(e) => setQuery(e.target.value)}
                                 bg="rgba(14, 14, 15, 0.9)"
                                 border="1px solid  #496075"

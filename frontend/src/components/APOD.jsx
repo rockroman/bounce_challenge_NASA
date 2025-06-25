@@ -147,6 +147,8 @@ const APOD = () => {
                     <Box
                         p={6}
                         bg="rgba(0, 0, 0, 0.5)"
+                        width="90vw"
+                        margin='auto'
                         borderRadius="lg"
                         boxShadow="sm"
                         fontSize="md"
@@ -158,7 +160,9 @@ const APOD = () => {
                                 Image Analysis
                             </Text>
 
-                            <Text lineHeight="1.8" textAlign="left" whiteSpace="pre-line">
+                            <Text lineHeight="1.8" textAlign="left"
+                             whiteSpace="pre-line"
+                             >
                                 {analysis.description}
                             </Text>
 
@@ -170,9 +174,9 @@ const APOD = () => {
                 )}
 
                 {/* Description */}
-                <Box>
+                <Box marginTop={5}>
 
-                    <Text mt={2} textAlign="left">
+                    <Text mt={2} textAlign="left" width="85vw" margin="auto">
                         {apodData?.explanation}
                     </Text>
                     {apodData?.copyright && (

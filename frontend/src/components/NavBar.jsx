@@ -56,17 +56,18 @@ const NavBar = () => {
           <Drawer.Trigger asChild>
                 <Button
                     animation="pulse 3s infinite"
-                    // colorScheme="blue"
-                    border="red"
+                    // border="red"
                     color="gray.300"
                     bg="rgb(41 72 147 / 89%)"
-
+                    aria-label="Navigation open button"
                     >
 
                     <MdRocketLaunch
                     size="3%"
                     color='white'
-                    border="red" />
+
+                    // border="red"
+                    />
                     </Button>
 
 

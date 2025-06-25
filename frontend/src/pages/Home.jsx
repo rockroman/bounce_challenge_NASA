@@ -1,4 +1,4 @@
-import { Box, Heading, Text, Button, VStack, HStack, Flex } from '@chakra-ui/react';
+import { Box, Heading, Text, Button, VStack, Flex } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
@@ -15,7 +15,7 @@ const Home = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length);
-    }, 5000); // Change image every 5 seconds
+    }, 5000);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -23,7 +23,7 @@ const Home = () => {
   return (
     <Flex
       w="full"
-      h="85vh" // Adjust height as needed
+      h="85vh"
       alignItems="center"
       justifyContent="center"
       bgImage={`url(${backgroundImages[currentImageIndex]})`}
@@ -31,6 +31,7 @@ const Home = () => {
       bgRepeat="no-repeat"
       bgSize="cover"
       transition="background-image 1s ease-in-out"
+      m={0}
     >
       <VStack
         spacing={6}
@@ -38,6 +39,8 @@ const Home = () => {
         bg="rgba(26, 26, 42, 0.8)"
         borderRadius="lg"
         textAlign="center"
+        w="85vw"
+
       >
         <Heading size="2xl" fontWeight="bold">
           Your Gateway to Space Exploration
@@ -45,7 +48,7 @@ const Home = () => {
         <Text fontSize="lg" maxW="2xl">
           Discover the cosmos with stunning images from NASA's archives, get AI-powered analysis, and explore the universe with our natural language search.
         </Text>
-        <HStack spacing={4}>
+        <Flex wrap="wrap" justify="center" gap={4}>
           <Button as={Link} to="/apod"
           //  colorScheme="blue"
            color="gray.100"
@@ -62,7 +65,7 @@ const Home = () => {
            >
             Search Images
           </Button>
-        </HStack>
+        </Flex>
       </VStack>
     </Flex>
   );
