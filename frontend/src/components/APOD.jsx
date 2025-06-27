@@ -103,6 +103,7 @@ const APOD = () => {
                             loading="lazy"
                             borderRadius="md"
                             mx="auto"
+
                         />
                     ) : (
                         <iframe
@@ -147,15 +148,16 @@ const APOD = () => {
                     <Box
                         p={6}
                         bg="rgba(0, 0, 0, 0.5)"
-                        width="90vw"
+                        // width="90vw"
                         margin='auto'
                         borderRadius="lg"
                         boxShadow="sm"
                         fontSize="md"
                         lineHeight="tall"
                         color="white"
+                        border="2px solid gray"
                     >
-                        <VStack align="stretch" spacing={4}>
+                        <VStack align="stretch" spacing={4} margin="auto">
                             <Text fontSize="2xl" fontWeight="bold" textAlign="center" mb={4}>
                                 Image Analysis
                             </Text>
@@ -176,7 +178,9 @@ const APOD = () => {
                 {/* Description */}
                 <Box marginTop={5}>
 
-                    <Text mt={2} textAlign="left" width="85vw" margin="auto">
+                    <Text mt={2} textAlign="left"
+                    // width="85vw"
+                    margin="auto">
                         {apodData?.explanation}
                     </Text>
                     {apodData?.copyright && (

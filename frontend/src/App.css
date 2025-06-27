@@ -37,7 +37,8 @@
   text-align: center;
   padding: 1rem;
   /* background: rgba(0, 0, 0, 0.5); */
-  background:linear-gradient(to bottom, #1a1a2e, #16213e);
+  /* background:linear-gradient(to bottom, #1a1a2e, #16213e); */
+  background:rgb(31, 48, 96);
   font-size: 0.9rem;
   color: #aaa;
 }
@@ -59,3 +60,8 @@
   border: 3px solid white;
 }
 
+
+.spinner-container{
+  display: flex;
+  flex-direction: column;
+}

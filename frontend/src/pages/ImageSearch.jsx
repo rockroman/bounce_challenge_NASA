@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import {
     Box,
     Heading,
@@ -39,6 +39,7 @@ const ImageSearch = () => {
     const [results, setResults] = useState([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
+    const inputRef = useRef(null);
 
 
     // Debounced fetch function
@@ -64,35 +65,70 @@ const ImageSearch = () => {
     }, [query, debouncedFetchSuggestions]);
 
 
-    const handleSearch = async (e) => {
-        if (e) e.preventDefault()
-        if (!query.trim()) return
+    const handleSearch = async (searchTerm) => {
+        const searchQuery = searchTerm || query;
+        if (!searchQuery.trim()) return;
 
-        setSuggestions([]);
+
         try {
-            setLoading(true)
-            setError(null)
-            const response = await axios.post('/api/image-search', { query })
-            console.log("response results = ",response.data.results)
-            setResults(response.data.results)
-            setQuery('')
-        } catch (err) {
-            setError('Failed to fetch images. Please try again.')
+            setLoading(true);
+            setError(null);
+            inputRef.current.setAttribute('disabled', true);
 
+
+            const response = await axios.post('/api/image-search', { query: searchQuery });
+            setResults(response.data.results);
+            setSuggestions([]);
+            setQuery('');
+
+        } catch (err) {
+            setError('Failed to fetch images. Please try again.');
             toaster.create({
-            title: "Error",
-            description: err.message || "Failed to fetch images. Please try again.",
-            type: "error",
-        })
+                title: "Error",
+                description: "Failed to fetch images. Please try again.",
+                type: "error",
+            });
         } finally {
-            setLoading(false)
+            setLoading(false);
+            inputRef.current.removeAttribute('disabled');
         }
-    }
+    };
+
+
+    // const handleSearch = async (e) => {
+    //     if (e) e.preventDefault()
+    //     if (!query.trim()) return
+
+    //     setSuggestions([]);
+    //     try {
+    //         setLoading(true)
+    //         setError(null)
+    //         const response = await axios.post('/api/image-search', { query })
+    //         console.log("response results = ",response.data.results)
+    //         setResults(response.data.results)
+    //         setQuery('')
+    //     } catch (err) {
+    //         setError('Failed to fetch images. Please try again.')
+
+    //         toaster.create({
+    //         title: "Error",
+    //         description:"Failed to fetch images. Please try again. or a different search term",
+    //         type: "error",
+    //     })
+    //     } finally {
+    //         setLoading(false)
+    //     }
+    // }
 
     const handleSuggestionClick = (suggestion) => {
         setQuery(suggestion);
         setSuggestions([]);
+        handleSearch(suggestion);
+        setQuery('');
+        setSuggestions([]);
     };
+
+
 
     return (
         <Box
@@ -123,11 +159,15 @@ const ImageSearch = () => {
                          onClick={handleSearch}/>
                         <InputGroup>
                             <Input
+                            ref={inputRef}
                                 placeholder="Show me pictures of Mars rovers from 2020"
-                                _placeholder={{ color: "#909eab" }}
+                                // _placeholder={{ color: "#909eab" }}
+                                _placeholder={{ color: "rgba(209, 209, 222)" }}
+
                                 value={query}
                                 variant="outline"
                                 size="lg"
+                                // bg = "rgba(209, 209, 222, 0.9)"
                                 onChange={(e) => setQuery(e.target.value)}
                                 bg="rgba(14, 14, 15, 0.9)"
                                 border="1px solid  #496075"
@@ -161,4 +201,3 @@ const ImageSearch = () => {
 }
 
 export default ImageSearch
-

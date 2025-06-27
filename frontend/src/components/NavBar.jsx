@@ -26,20 +26,13 @@ const NavBar = () => {
   return (
     <>
       <Flex
-        bg="linear-gradient(to bottom, #1a1a2e, #16213e)"
+        bg="rgb(31, 48, 96)"
         color="white"
         minH="60px"
         py={2}
         px={4}
         align="center"
         justify="space-between">
-        {/* <Text
-          fontSize="2xl"
-          fontWeight="bold"
-          bg="gray.200"
-          bgClip="text">
-          NASA Explorer
-        </Text> */}
         <Link
           key="Home"
           as={RouterLink}
@@ -55,20 +48,17 @@ const NavBar = () => {
         <Drawer.Root open={open} onOpenChange={(e) => setOpen(e.open)}>
           <Drawer.Trigger asChild>
                 <Button
-                    animation="pulse 3s infinite"
-                    // border="red"
+                    // animation="pulse 2.5s infinite"
                     color="gray.300"
-                    bg="rgb(41 72 147 / 89%)"
+                    bg="rgb(67, 95, 255)"
                     aria-label="Navigation open button"
                     >
 
                     <MdRocketLaunch
                     size="3%"
                     color='white'
-
-                    // border="red"
                     />
-                    </Button>
+                  </Button>
 
 
           </Drawer.Trigger>

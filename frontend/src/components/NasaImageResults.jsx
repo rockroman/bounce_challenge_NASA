@@ -10,10 +10,10 @@ import {
     Dialog,
     Portal,
     CloseButton,
-    Container, // Import Container
-    Center, // Import Center
+    Container,
+    Center,
 } from '@chakra-ui/react';
-import RocketSpinner from './RocketSpinner'; // Import RocketSpinner
+import RocketSpinner from './RocketSpinner';
 
 const NasaImageResults = ({ results, loading, error }) => {
     const [selectedImage, setSelectedImage] = React.useState(null);
@@ -25,8 +25,9 @@ const NasaImageResults = ({ results, loading, error }) => {
     if (loading) {
         return (
             <Container centerContent p={8}>
-                <Center>
+                <Center className='spinner-container'>
                     <RocketSpinner size="xl" />
+                    <Text color="white">Retrieving Image/s ... </Text>
                 </Center>
             </Container>
         );
