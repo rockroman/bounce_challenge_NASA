@@ -2,7 +2,7 @@ import { Box, Heading, Text, Button, VStack, Flex } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
-// A few sample space images for the background
+// space images for the background
 const backgroundImages = [
   'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=2072&auto=format&fit=crop',

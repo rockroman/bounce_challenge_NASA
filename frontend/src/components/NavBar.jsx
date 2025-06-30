@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
-import { GiHamburgerMenu } from "react-icons/gi";
 import { MdRocketLaunch } from "react-icons/md";
-import { LuNavigation } from "react-icons/lu";
 import { Link as RouterLink } from 'react-router-dom';
 import {
   Button,
@@ -48,7 +46,6 @@ const NavBar = () => {
         <Drawer.Root open={open} onOpenChange={(e) => setOpen(e.open)}>
           <Drawer.Trigger asChild>
                 <Button
-                    // animation="pulse 2.5s infinite"
                     color="gray.300"
                     bg="rgb(67, 95, 255)"
                     aria-label="Navigation open button"

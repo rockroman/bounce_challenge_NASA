@@ -11,7 +11,7 @@ import {
     VStack,
     Center,
 } from "@chakra-ui/react";
-import RocketSpinner from './RocketSpinner'; // Import the new spinner
+import RocketSpinner from './RocketSpinner';
 
 const APOD = () => {
     const [apodData, setApodData] = useState(null);
@@ -148,7 +148,6 @@ const APOD = () => {
                     <Box
                         p={6}
                         bg="rgba(0, 0, 0, 0.5)"
-                        // width="90vw"
                         margin='auto'
                         borderRadius="lg"
                         boxShadow="sm"

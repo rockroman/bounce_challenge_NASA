@@ -17,7 +17,6 @@ const RocketSpinner = ({ size = 'xl' }) => {
     xl: { boxSize: 24 },
   };
 
-  // Apply the animation to the Box component's `animation` prop
   const animation = `${spin} 1.5s linear infinite`;
 
   return (

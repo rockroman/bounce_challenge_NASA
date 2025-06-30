@@ -15,7 +15,6 @@ const SuggestionsDropdown = ({ suggestions, onSelect }) => {
             top="100%"
             left={0}
             right={0}
-            // bg="gray.800"
             bg="linear-gradient(to bottom, #1a1a2e, #16213e)"
             width="85vw"
             border="1px solid"

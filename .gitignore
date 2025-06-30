@@ -28,3 +28,4 @@ yarn-error.log*
 *.sw?
 
 flow.md
+example.md

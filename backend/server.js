@@ -78,14 +78,30 @@ app.get('/api/search-suggestions', async (req, res) => {
 
 })
 
+// const PORT = process.env.PORT || 3000;
+// app.listen(PORT, () => {
+//     console.log(`Server is running on port ${ PORT }`);
+//     console.log('Available endpoints:');
+//     console.log('GET / - Home endpoint');
+//     console.log('GET /api/apod - NASA Picture of the Day');
+//     console.log('GET /api/image-search - NLP search of images in NASA database ');
+//     console.log('POST /api/analyze-image - Analyze astronomy images');
+//     console.log('GET /api/search-suggestions - simulate  search suggestions ')
+// });
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server is running on port ${ PORT }`);
     console.log('Available endpoints:');
     console.log('GET / - Home endpoint');
     console.log('GET /api/apod - NASA Picture of the Day');
     console.log('GET /api/image-search - NLP search of images in NASA database ');
     console.log('POST /api/analyze-image - Analyze astronomy images');
-    console.log('GET /api/search-suggestions - simulate  search suggestions ')
+    console.log('GET /api/search-suggestions - simulate  search suggestions ');
 });
+
+
+export { app, server };
+
+
 
