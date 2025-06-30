@@ -79,7 +79,7 @@ const ImageSearch = () => {
             const response = await axios.post('/api/image-search', { query: searchQuery });
             setResults(response.data.results);
             setSuggestions([]);
-            setQuery('');
+
 
         } catch (err) {
             setError('Failed to fetch images. Please try again.');
@@ -98,7 +98,6 @@ const ImageSearch = () => {
         setQuery(suggestion);
         setSuggestions([]);
         handleSearch(suggestion);
-        setQuery('');
         setSuggestions([]);
     };
 
@@ -122,13 +121,13 @@ const ImageSearch = () => {
                     </Text>
                 </Box>
 
-                <Box as="form" onSubmit={handleSearch} position="relative">
+                <Box as="form" onSubmit={(e) => { e.preventDefault(); handleSearch(query); }} position="relative">
                         <Flex align="center" gap={3} width="85vw">
                         <LuSearch color='#74abdf'
                          className='search-icon'
                          cursor="pointer"
                          style={{ flexShrink: 0 }}
-                         onClick={handleSearch}/>
+                         onClick={()=>handleSearch(query)}/>
                         <InputGroup>
                             <Input
                             ref={inputRef}
