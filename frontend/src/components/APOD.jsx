@@ -42,7 +42,8 @@ const APOD = () => {
         try {
             setAnalyzing(true);
             const response = await axios.post('/api/analyze-image', {
-                imageUrl: apodData.url
+                imageUrl: apodData.url,
+                imageTitle: apodData?.title || 'Unknown title'
             });
             //  the description text  Clean up-remove markdown
             const cleanDescription = response.data.description

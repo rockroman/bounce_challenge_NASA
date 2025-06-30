@@ -10,7 +10,7 @@ const router = express.Router();
  */
 router.post('/analyze-image', async (req, res) => {
     try {
-        const { imageUrl } = req.body;
+        const { imageUrl, imageTitle } = req.body;
 
         if (!imageUrl) {
             return res.status(400).json({ error: 'Missing imageUrl in request body' });
@@ -24,7 +24,19 @@ router.post('/analyze-image', async (req, res) => {
                     content: [
                         {
                             type: "text",
-                            text: "Please describe this NASA astronomy image in scientific detail."
+                            text: `You are a NASA astronomy image analysis expert. Analyze the image titled "${ imageTitle || 'Unknown Title' }" and provide a detailed scientific analysis.
+                            IMPORTANT RULES:
+                            1. The image title "${ imageTitle || 'Unknown Title' }" must be used as the primary context for your analysis. Assume the title is accurate and directly related to the image.
+                            2. Provide ONLY factual, accurate, and relevant information specific to this image and its title.
+                            3. DO NOT include data or details that cannot be validated or are not directly related to the image title.
+                            4. Avoid generic descriptions that could apply to other images.
+
+                            STRUCTURE YOUR ANALYSIS AS FOLLOWS:
+                            - Key Features: Describe the unique and observable features of the image based on the title.
+                            - Scientific Context: Explain the scientific significance of the features and their relevance to astronomy.
+                            - Observational Techniques: Mention how such images are typically captured or studied.
+
+                            Focus on the specific details of the image and ensure your analysis is precise and verifiable.`
                         },
                         {
                             type: "image_url",
@@ -56,5 +68,7 @@ router.post('/analyze-image', async (req, res) => {
         });
     }
 });
+
+
 
 export default router;
